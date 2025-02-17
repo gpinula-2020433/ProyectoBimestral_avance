@@ -1,0 +1,661 @@
+{
+	"info": {
+		"_postman_id": "af4a2dd3-da06-4022-ba22-cc3fb543540f",
+		"name": "OnlineSales",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37957002"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "registerUserAdmin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "Lalo",
+									"type": "text"
+								},
+								{
+									"key": "surname",
+									"value": "Pinula",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "lalopinula1",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "lalopinula1@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "Lalo123!",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "45541242",
+									"type": "text"
+								},
+								{
+									"key": "role",
+									"value": "ADMIN",
+									"type": "text"
+								},
+								{
+									"key": "",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:3200/register",
+							"host": [
+								"localhost"
+							],
+							"port": "3200",
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "loginUserAdmin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data = JSON.parse(responseBody);\r",
+									"postman.setGlobalVariable(\"token\", data.token)"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "userLoggin",
+									"value": "lalopinula1",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "Lalo123!",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:3200/login",
+							"host": [
+								"localhost"
+							],
+							"port": "3200",
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getUsers",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:3200/v1/user/",
+							"host": [
+								"localhost"
+							],
+							"port": "3200",
+							"path": [
+								"v1",
+								"user",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "registerUserClient",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "Juan Carlos",
+									"type": "text"
+								},
+								{
+									"key": "surname",
+									"value": "Bodoque",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "cbodoque",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "cbodoque@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "Bodoque123!",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "45541242",
+									"type": "text"
+								},
+								{
+									"key": "role",
+									"value": "CLIENT",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:3200/register",
+							"host": [
+								"localhost"
+							],
+							"port": "3200",
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "loginUserClient",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data = JSON.parse(responseBody);\r",
+									"postman.setGlobalVariable(\"token\", data.token)"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "userLoggin",
+									"value": "cbodoque",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "Bodoque123!",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:3200/login",
+							"host": [
+								"localhost"
+							],
+							"port": "3200",
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Category",
+			"item": [
+				{
+					"name": "getCategorys",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "{{token}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "localhost:3200/v1/category/",
+							"host": [
+								"localhost"
+							],
+							"port": "3200",
+							"path": [
+								"v1",
+								"category",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "saveCategory",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "Dispositivos tecnológicos",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Dispositivos para todas las edades",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:3200/v1/category/",
+							"host": [
+								"localhost"
+							],
+							"port": "3200",
+							"path": [
+								"v1",
+								"category",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateCategory",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "Productos_Limpieza",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Prud. de Platos",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:3200/v1/category/67b2c7bee45eacb84131d905",
+							"host": [
+								"localhost"
+							],
+							"port": "3200",
+							"path": [
+								"v1",
+								"category",
+								"67b2c7bee45eacb84131d905"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getCategoryID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:3200/v1/category/67b2a8446b9ed5cb7230f3ab",
+							"host": [
+								"localhost"
+							],
+							"port": "3200",
+							"path": [
+								"v1",
+								"category",
+								"67b2a8446b9ed5cb7230f3ab"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteCategory",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "localhost:3200/v1/category/67b2cca543b2b137d1eac965",
+							"host": [
+								"localhost"
+							],
+							"port": "3200",
+							"path": [
+								"v1",
+								"category",
+								"67b2cca543b2b137d1eac965"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Product",
+			"item": [
+				{
+					"name": "getProducts",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "localhost:3200/v1/product/",
+							"host": [
+								"localhost"
+							],
+							"port": "3200",
+							"path": [
+								"v1",
+								"product",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "saveProduct",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "PC Escritorio",
+									"type": "text"
+								},
+								{
+									"key": "brand",
+									"value": "DELL",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Computadora de escritorio con I7 de 10ma generación",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "5000",
+									"type": "text"
+								},
+								{
+									"key": "stock",
+									"value": "4",
+									"type": "text"
+								},
+								{
+									"key": "SKU",
+									"value": "123escritoriopc",
+									"type": "text"
+								},
+								{
+									"key": "status",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "category",
+									"value": "67b2cca543b2b137d1eac965",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:3200/v1/product/",
+							"host": [
+								"localhost"
+							],
+							"port": "3200",
+							"path": [
+								"v1",
+								"product",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateProduct",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "PC Escritorio12",
+									"type": "text"
+								},
+								{
+									"key": "brand",
+									"value": "DELL",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Computadora de escritorio con I5 de 11ma generación",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "5000",
+									"type": "text"
+								},
+								{
+									"key": "stock",
+									"value": "4",
+									"type": "text"
+								},
+								{
+									"key": "SKU",
+									"value": "123escritoriopc",
+									"type": "text"
+								},
+								{
+									"key": "status",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:3200/v1/product/67b2ccc043b2b137d1eac96d",
+							"host": [
+								"localhost"
+							],
+							"port": "3200",
+							"path": [
+								"v1",
+								"product",
+								"67b2ccc043b2b137d1eac96d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getProductID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:3200/v1/product/67b2ccc043b2b137d1eac96d",
+							"host": [
+								"localhost"
+							],
+							"port": "3200",
+							"path": [
+								"v1",
+								"product",
+								"67b2ccc043b2b137d1eac96d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteProduct",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:3200/v1/product/67b2ccc043b2b137d1eac96d",
+							"host": [
+								"localhost"
+							],
+							"port": "3200",
+							"path": [
+								"v1",
+								"product",
+								"67b2ccc043b2b137d1eac96d"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
