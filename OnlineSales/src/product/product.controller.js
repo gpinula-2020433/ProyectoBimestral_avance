@@ -322,3 +322,97 @@ export const bestSellingProducts = async(req, res)=>{
         )
     }
 }
+
+
+// Buscar productos por nombre con filtro y ordenación
+export const searchProductsByName = async (req, res) => {
+    const { name, orderByName } = req.query // Leer filtros de la URL
+
+    try {
+        const filters = {}
+
+        // Si se proporciona un nombre, buscar con coincidencia parcial (insensible a mayúsculas)
+        //$regex para que busque algo parecido y options i para que no se sensible a mayuscula
+        if (name) {
+            filters.name = { $regex: name, $options: 'i' } 
+        }
+
+        let productsQuery = Product.find(filters)
+            .limit(20)
+            .populate('category', 'name -_id')
+
+        // Ordenar por nombre (ascendente o descendente)
+        if (orderByName) {
+            const sortOrder = (orderByName === 'asc' ? 1 : -1)
+            productsQuery = productsQuery.sort({ name: sortOrder })
+        }
+
+        const products = await productsQuery
+
+        if (products.length === 0) {
+            return res.status(404).send({
+                success: false,
+                message: 'Products not found'
+            })
+        }
+
+        return res.send({
+            success: true,
+            message: 'Products found:',
+            total: products.length,
+            products
+        })
+
+    } catch (err) {
+        console.error(err)
+        return res.status(500).send({
+            success: false,
+            message: 'General error',
+            err
+        })
+    }
+}
+
+// Obtener productos filtrados por categoría
+export const getProductsByCategory = async (req, res) => {
+    const { categoryId } = req.params
+    const { orderByName } = req.query
+
+    try {
+        const filters = { category: categoryId }
+
+        let productsQuery = Product.find(filters)
+            .limit(20)
+            .populate('category', 'name -_id')
+
+        // Ordenar productos por nombre si se especifica
+        if (orderByName) {
+            const sortOrder = (orderByName === 'asc' ? 1 : -1)
+            productsQuery = productsQuery.sort({ name: sortOrder })
+        }
+
+        const products = await productsQuery
+
+        if (products.length === 0) {
+            return res.status(404).send({
+                success: false,
+                message: 'No products found for this category'
+            })
+        }
+
+        return res.send({
+            success: true,
+            message: 'Products found for the category:',
+            total: products.length,
+            products
+        })
+
+    } catch (err) {
+        console.error(err)
+        return res.status(500).send({
+            success: false,
+            message: 'General error',
+            err
+        })
+    }
+}
