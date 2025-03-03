@@ -1,5 +1,5 @@
 import Category from './category.model.js'
-import Publication from '../publication/publication.model.js'
+import Product from '../product/product.model.js'
 
 //Función para registrar un category
 export const save = async(req, res) => {
@@ -32,7 +32,7 @@ export const save = async(req, res) => {
         return res.send(
             {
                 success: true,
-                message: `${category.name} saved successfully, . Status: ${category.status}`,
+                message: `${category.name} saved successfully. Status: ${category.status}`,
                 category
             }
         )
@@ -187,7 +187,7 @@ export const deleteCategory = async(req, res)=>{
             }
         )
 
-        if(category.name === 'Default') 
+        if(category.name === 'Default Category') 
         return res.status(400).send(
             {
                 success: false,
@@ -197,12 +197,15 @@ export const deleteCategory = async(req, res)=>{
         
         //En dado caso no es el default, que se elimine y pase las publicaciones al default
         let defaultCategory = await Category.findOne(
-            {name: 'Default' }
+            {name: 'Default Category' }
         )
 
-        // Reasignar publicaciones a la categoría "Default"
-        await Publication.updateMany(
-            { category: id }, 
+        //Reasignar productos a la categoría Default
+        //Que busque productos que en el campo category tengan el id
+        //de la categoria que vamos a eliminar
+        //y que le coloque el id de la categoria default
+        await Product.updateMany(
+            { category: id },
             { category: defaultCategory._id }
         )
 
@@ -233,7 +236,7 @@ export const addDefaultCategory = async()=>{
         //Verificamos si no esta creada
         const categoryExists = await Category.findOne(
             {
-                name:'Default'
+                name:'Default Category'
             }
         )
         //Si no existe que la cree
@@ -242,7 +245,7 @@ export const addDefaultCategory = async()=>{
                 {
                     name: 'Default Category',
                     description: 'Default category for products',
-                    status: true
+                    status: 'ACTIVE'
                 }
             )
             await category.save()

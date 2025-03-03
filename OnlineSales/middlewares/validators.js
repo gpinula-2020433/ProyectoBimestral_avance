@@ -26,7 +26,7 @@ export const registerValidator = [
         .notEmpty()
         .isStrongPassword()
         .withMessage('Password must be strong')
-        .isLength({min: 8})
+        .isLength({ min: 8 })
         .withMessage('Password need min characters'),
     body('phone', 'Phone cannot be empty')
         .notEmpty()
@@ -44,7 +44,7 @@ export const updateUserValidator = [
         .optional()
         .notEmpty()
         .isEmail()
-        .custom((email, {req}) => existEmail(email, req.user)),
+        .custom((email, { req }) => existEmail(email, req.user)),
     body('password')
         .optional()
         .notEmpty()
@@ -80,6 +80,7 @@ export const updateUserValidator = [
 ] */
 
 //------------------------
+/*
 export const registerCompanyValidator = [
     body('name', 'Name cannot be empty')
         .notEmpty()
@@ -95,7 +96,7 @@ export const registerCompanyValidator = [
         .withMessage('Years of trajectory must be a number integer'),
     body('category', ' cannot be empty')
         .notEmpty(),
-    body('registeredBy', 'RegisterBy is not required' )
+    body('registeredBy', 'RegisterBy is not required')
         .optional()
         .notEmpty(),
     validateErrors
@@ -120,9 +121,10 @@ export const updateCompanyValidator = [
     body('category', ' cannot be empty')
         .optional()
         .notEmpty(),
-    body('registeredBy', 'RegisterBy is not required' )
+    body('registeredBy', 'RegisterBy is not required')
         .optional()
         .notEmpty()
         .custom(notRequiredField),
     validateErrors
 ]
+    */

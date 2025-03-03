@@ -26,7 +26,7 @@ export const save = async(req, res) => {
                 }
             )
         }
-        //El campo category guarda el ID de la categorya, por la relacion
+        //El campo category guarda el ID de la categoria, por la relacion
         const category = await Category.findById(data.category)
         if(!category){
             res.send(
@@ -36,11 +36,15 @@ export const save = async(req, res) => {
                 }
             )
         }
+        //Fijo lo activa porque ya hay un producto registrado de esa categoria
         if(category.status === 'INACTIVE'){
             category.status = 'ACTIVE'
             await category.save()
         }
-
+        //Esto es lo que se revisa, si es que hay productos
+        if(data.stock <= 0){
+            data.status = 'NOTAVAILABLE'
+        }
         const product = new Product(data)
         await product.save()
         return res.send(
@@ -159,6 +163,15 @@ export const updateProduct = async(req, res)=>{
             )
         }
 
+        //Esto es lo que se revisa, si es que hay productos
+        if(data.stock <= 0){
+            data.status = 'NOTAVAILABLE'
+        }
+
+        if(data.stock > 0){
+            data.status = 'AVAILABLE'
+        }
+
         const update = await Product.findByIdAndUpdate(
             id,
             data,
@@ -194,18 +207,41 @@ export const updateProduct = async(req, res)=>{
 export const deleteProduct = async(req, res)=>{
     try {
         let {id} = req.params
-        let product = await Product.findByIdAndDelete(id)
-        if(!product) 
+
+        const {category} = await Product.findById(id)
+        if(!category){
+            return res.send(
+                {
+                    success: false,
+                    message: 'Product not found'
+                }
+            )
+        }
+
+        let deletedProduct = await Product.findByIdAndDelete(id)
+        if(!deletedProduct) 
             return res.status(404).send(
                 {
                     success: false,
                     message: 'Product not founded'
                 }
             )
+        let confirmCategoriaDesactived = ''
+        
+        //Encontrar dentro de Productos si hay otro con esa categoria
+        const revisarCategoria = await Product.find({category})
+        if(revisarCategoria.length === 0){
+            const categoriaADesactivar = await Category.findById(category)
+            if(categoriaADesactivar){
+                categoriaADesactivar.status = 'INACTIVE'
+                categoriaADesactivar.save()
+                confirmCategoriaDesactived = ` | The category | ${categoriaADesactivar.name} | has been set to INACTIVE`
+            }
+        }
         return res.send(
             {
                 success: true,
-                message: 'Deleted succesfully!!!'
+                message: 'Deleted succesfully!!!' + confirmCategoriaDesactived
             }
         )
     } catch (err) {
