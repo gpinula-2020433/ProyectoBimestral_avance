@@ -1,9 +1,46 @@
 import Product from './product.model.js'
+import Category from '../category/category.model.js'
 
 //Función para registrar un product
 export const save = async(req, res) => {
     const data = req.body
     try {
+        const productoExistente = await Product.findOne(
+            {
+                description: data.description
+            }
+        )
+        if(await Product.findOne({name: data.name})){
+            return res.send(
+                {
+                    success: false,
+                    message: `The product ${data.name} already exists`
+                }
+            )
+        }
+        if(productoExistente){
+            return res.send(
+                {
+                    success: false,
+                    message: `The product | ${productoExistente.name} | already has that description`
+                }
+            )
+        }
+        //El campo category guarda el ID de la categorya, por la relacion
+        const category = await Category.findById(data.category)
+        if(!category){
+            res.send(
+                {
+                    success: false,
+                    message: 'La categoria no existe'
+                }
+            )
+        }
+        if(category.status === 'INACTIVE'){
+            category.status = 'ACTIVE'
+            await category.save()
+        }
+
         const product = new Product(data)
         await product.save()
         return res.send(
@@ -113,7 +150,6 @@ export const updateProduct = async(req, res)=>{
                 }
             )
         }
-
         if(productoExistente){
             return res.send(
                 {
@@ -166,12 +202,12 @@ export const deleteProduct = async(req, res)=>{
                     message: 'Product not founded'
                 }
             )
-            return res.send(
-                {
-                    success: true,
-                    message: 'Deleted succesfully!!!'
-                }
-            )
+        return res.send(
+            {
+                success: true,
+                message: 'Deleted succesfully!!!'
+            }
+        )
     } catch (err) {
         console.error('General error', err)
         return res.status(500).send(
@@ -184,4 +220,69 @@ export const deleteProduct = async(req, res)=>{
     }
 }
 
+//Productos fuera de stock
+export const outOfStockProducts = async(req, res)=>{
+    try {
+        const products = await Product.find({stock:0})
+            .populate('category', 'name -_id')
+        //Verificamos si lo regreso vacio
+        if(products.length ===0){
+            return res.send(
+                {
+                    success:false,
+                    message: 'No out of stock products found'
+                }
+            )
+        }
+        return res.send(
+            {
+                success: true,
+                message: 'Out of Stock products found',
+                total: products.length + ' products',
+                products
+            }
+        )
+    } catch (err) {
+        console.error('General error', err)
+        return res.status(500).send(
+            {
+                success: false,
+                message: 'General error',
+                err
+            }
+        )
+    }
+}
 
+//Productos mas vendidos
+export const bestSellingProducts = async(req, res)=>{
+    try {
+        const products = await Product.find().sort({soldCount: -1})
+            .populate('category', 'name -_id')
+        if(products.length===0){
+            return res.send(
+                {
+                    success: false,
+                    message: 'Productos not found'
+                }
+            )
+        }
+        return res.send(
+            {
+                success: true,
+                message: 'Best selling products found',
+                total: products.length + ' products',
+                products
+            }
+        )
+    } catch (err) {
+        console.error('General error', err)
+        return res.status(500).send(
+            {
+                success: false,
+                message: 'General error',
+                err
+            }
+        )
+    }
+}

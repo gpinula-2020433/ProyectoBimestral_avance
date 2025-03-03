@@ -13,8 +13,11 @@ const categorySchema = Schema(
             required: [true, 'Description is required']
         },
         status: {
-            type: Boolean,
-            default: true
+            type: String,
+            required: [true, 'Status is required'],
+            uppercase: true,
+            enum: ['ACTIVE', 'INACTIVE'],
+            default: 'INACTIVE'
         }
     },
     {

@@ -44,3 +44,20 @@ export const findUser = async(id)=>{
 export const objectIdValid = (objectId)=>{
     if(!isValidObjectId(objectId)) throw new Error(`The value of field is not a valid ObjectId`)
 }
+
+//------------------
+export const existNameCompany = async(name)=>{
+    const alreadyName = await Company.findOne({name})
+    if(alreadyName){
+        console.error(`The company | ${name} | already exists`)
+        throw new Error(`The company | ${name} | already exists`)
+    }
+}
+
+export const existDescriptionCompany = async(description)=>{
+    const alreadyDescription = await Company.findOne({description})
+    if(alreadyDescription){
+        console.error(`The company | ${alreadyDescription.name} | already has that description`)
+        throw new Error(`The company | ${alreadyDescription.name} | already has that description`)
+    }
+}

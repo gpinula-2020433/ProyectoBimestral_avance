@@ -28,6 +28,11 @@ const productSchema = Schema(
             min: 0,
             default: 0
         },
+        soldCount:{//No es requerido
+            type: Number,
+            min: 0,
+            default: 0
+        },
         SKU: {
             type: String,
             required: [true, 'SKU is required'],
@@ -35,9 +40,12 @@ const productSchema = Schema(
             maxLength: [15, `Can't be overcome 15 characters`],
             unique: true
         },
-        status:{
-            type: Boolean,
-            default: true
+        status: {
+            type: String,
+            required: [true, 'Status is required'],
+            uppercase: true,
+            enum: ['AVAILABLE', 'NOTAVAILABLE'],
+            default: 'AVAILABLE'
         },
         category:{
             type: Schema.Types.ObjectId,

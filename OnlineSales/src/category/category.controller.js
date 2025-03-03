@@ -1,25 +1,23 @@
 import Category from './category.model.js'
-import Product from '../product/product.model.js'
+import Publication from '../publication/publication.model.js'
 
 //Función para registrar un category
 export const save = async(req, res) => {
     const data = req.body
     try {
 
-        const categoriaExistente = await Category.findOne(
-            {
-                description: data.description
-            }
-        )
+        //Si da false es porque no existe y lo guarda directamente
         if(await Category.findOne({name: data.name})){
             return res.send(
                 {
                     success: false,
-                    message: `The category ${data.name} already exists`
+                    message: `The category | ${data.name} | already exists`
                 }
             )
         }
-
+        const categoriaExistente = await Category.findOne(
+            {description: data.description}
+        )
         if(categoriaExistente){
             return res.send(
                 {
@@ -28,13 +26,13 @@ export const save = async(req, res) => {
                 }
             )
         }
-
+        
         const category = new Category(data)
         await category.save()
         return res.send(
             {
                 success: true,
-                message: `${category.name} saved successfully`,
+                message: `${category.name} saved successfully, . Status: ${category.status}`,
                 category
             }
         )
@@ -118,26 +116,23 @@ export const getCategory = async(req, res)=>{
     }
 }
 
-
 export const updateCategory = async(req, res)=>{
     try {
         const { id } = req.params
         const data = req.body
-
-        const categoriaExistente = await Category.findOne(
-            {
-                description: data.description
-            }
-        )
+        
+        //Si da false es porque no existe y lo actualiza directamente
         if(await Category.findOne({name: data.name})){
             return res.send(
                 {
                     success: false,
-                    message: `The category ${data.name} already exists`
+                    message: `The category | ${data.name} | already exists`
                 }
             )
         }
-
+        const categoriaExistente = await Category.findOne(
+            {description: data.description}
+        )
         if(categoriaExistente){
             return res.send(
                 {
@@ -182,7 +177,7 @@ export const updateCategory = async(req, res)=>{
 export const deleteCategory = async(req, res)=>{
     try {
         let {id} = req.params
-        let category = await Category.findByIdAndDelete(id)
+        let category = await Category.findById(id)
         
         if(!category) 
         return res.status(404).send(
@@ -199,18 +194,16 @@ export const deleteCategory = async(req, res)=>{
                 message: `Can't delete default category`,
             }
         )
-        //En dado caso no es el default, que se elimine y pase los product al default
-
-        let defCategory = await Category.findOne(
-            { 
-                name: 'Default' 
-            }
+        
+        //En dado caso no es el default, que se elimine y pase las publicaciones al default
+        let defaultCategory = await Category.findOne(
+            {name: 'Default' }
         )
 
-        // Reasignar productos a la categoría "Default"
-        await Product.updateMany(
+        // Reasignar publicaciones a la categoría "Default"
+        await Publication.updateMany(
             { category: id }, 
-            { category: defCategory._id }
+            { category: defaultCategory._id }
         )
 
         // Ahora eliminamos la categoría
@@ -247,8 +240,8 @@ export const addDefaultCategory = async()=>{
         if(!categoryExists){
             let category = new Category(
                 {
-                    name: 'Default',
-                    description: 'Default Category for products',
+                    name: 'Default Category',
+                    description: 'Default category for products',
                     status: true
                 }
             )
