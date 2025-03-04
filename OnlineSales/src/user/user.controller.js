@@ -133,6 +133,7 @@ export const addDefaultAdmin = async()=>{
                     email: 'admin@gmail.com',
                     password: passwordAdmin,
                     phone: '54411221',
+                    NIT: '4541241542132',
                     role: 'ADMIN'
                 }
             )

@@ -47,6 +47,13 @@ const userSchema = Schema(
             //macth: [/^\+[0-9]{1,3} [0-9]{3,5}-[0-9]{4}$/]
  
         },
+        NIT:{
+            type: String,
+            required: [true, 'NIT is required'],
+            minLength: [13, `Can't be overcame 13 characters`],
+            maxLength: [13, 'NIT must be 13 numbers'],
+            unique: [true, 'NIT already exists']
+        },
         role: {
             type: String,
             required: [true, 'Role is required'],

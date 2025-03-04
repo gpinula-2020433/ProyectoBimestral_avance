@@ -16,12 +16,12 @@ import { validateJwt, isAdmin } from '../../middlewares/validate.jwt.js';
 const api = Router();
 
 
-api.get('/fuerastock', outOfStockProducts)
-api.get('/productosmasvendidos', bestSellingProducts)
-api.get('/buscarproductbyname', searchProductsByName)
-api.get('/filterproductsbycategory/:categoryId', getProductsByCategory)
+api.get('/fuerastock', [validateJwt], outOfStockProducts)
+api.get('/productosmasvendidos',[validateJwt], bestSellingProducts)
+api.get('/buscarproductbyname', [validateJwt],searchProductsByName)
+api.get('/filterproductsbycategory/:categoryId', [validateJwt],getProductsByCategory)
 
-api.get('/:id', [validateJwt, isAdmin], getProduct);
+api.get('/:id', [validateJwt], getProduct);
 api.get('/',[validateJwt],  getAllP);
 api.post('/', [validateJwt, isAdmin], save)
 api.put('/:id', [validateJwt, isAdmin] , updateProduct);
