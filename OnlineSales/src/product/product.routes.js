@@ -22,7 +22,7 @@ api.get('/buscarproductbyname', searchProductsByName)
 api.get('/filterproductsbycategory/:categoryId', getProductsByCategory)
 
 api.get('/:id', [validateJwt, isAdmin], getProduct);
-api.get('/', getAllP);
+api.get('/',[validateJwt],  getAllP);
 api.post('/', [validateJwt, isAdmin], save)
 api.put('/:id', [validateJwt, isAdmin] , updateProduct);
 api.delete('/:id', [validateJwt, isAdmin] , deleteProduct);
