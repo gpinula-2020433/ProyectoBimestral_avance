@@ -18,7 +18,7 @@ const api = Router()
 //Rutas privadas (Solo puede acceder su está logeado)
 api.get('/',  getAll)
 api.get('/:id', [validateJwt], get) //El campo del token se llama authorization, se usa get
-api.put('/updatepassword/:id', validateJwt, updatePassword)
+api.put('/updatepassword/:id', [validateJwt], updatePassword)
 api.put('/:id', 
     [
         validateJwt, 
