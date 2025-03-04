@@ -323,53 +323,54 @@ export const bestSellingProducts = async(req, res)=>{
     }
 }
 
-
-// Buscar productos por nombre con filtro y ordenación
+// Buscar productos por nombre con filtro
 export const searchProductsByName = async (req, res) => {
-    const { name, orderByName } = req.query // Leer filtros de la URL
-
+    const { name, orderByName } = req.query
     try {
         const filters = {}
 
-        // Si se proporciona un nombre, buscar con coincidencia parcial (insensible a mayúsculas)
+        //Si se proporciona un nombre, buscar con coincidencia parcial (insensible a mayúsculas)
         //$regex para que busque algo parecido y options i para que no se sensible a mayuscula
         if (name) {
             filters.name = { $regex: name, $options: 'i' } 
         }
-
-        let productsQuery = Product.find(filters)
+        let productosEncontrados = Product.find(filters)
             .limit(20)
             .populate('category', 'name -_id')
 
-        // Ordenar por nombre (ascendente o descendente)
+        //Ordenar por nombre (ascendente o descendente)
         if (orderByName) {
-            const sortOrder = (orderByName === 'asc' ? 1 : -1)
-            productsQuery = productsQuery.sort({ name: sortOrder })
+            const ordenados = (orderByName === 'asc' ? 1 : -1)
+            //Hace que se ordene en base al nombre
+            productosEncontrados = productosEncontrados.sort({ name: ordenados })
         }
 
-        const products = await productsQuery
-
+        const products = await productosEncontrados
         if (products.length === 0) {
-            return res.status(404).send({
-                success: false,
-                message: 'Products not found'
-            })
+            return res.status(404).send(
+                {
+                    success: false,
+                    message: 'There are no products'
+                }
+            )
         }
-
-        return res.send({
-            success: true,
-            message: 'Products found:',
-            total: products.length,
-            products
-        })
-
+        return res.send(
+            {
+                success: true,
+                message: 'Products found:',
+                total: products.length,
+                products
+            }
+        )
     } catch (err) {
         console.error(err)
-        return res.status(500).send({
-            success: false,
-            message: 'General error',
-            err
-        })
+        return res.status(500).send(
+            {
+                success: false,
+                message: 'General error',
+                err
+            }
+        )
     }
 }
 
@@ -392,27 +393,30 @@ export const getProductsByCategory = async (req, res) => {
         }
 
         const products = await productsQuery
-
         if (products.length === 0) {
-            return res.status(404).send({
-                success: false,
-                message: 'No products found for this category'
-            })
+            return res.status(404).send(
+                {
+                    success: false,
+                    message: 'No products found for this category'
+                }
+            )
         }
-
-        return res.send({
-            success: true,
-            message: 'Products found for the category:',
-            total: products.length,
-            products
-        })
-
+        return res.send(
+            {
+                success: true,
+                message: 'Products found for the category:',
+                total: products.length,
+                products
+            }
+        )
     } catch (err) {
         console.error(err)
-        return res.status(500).send({
-            success: false,
-            message: 'General error',
-            err
-        })
+        return res.status(500).send(
+            {
+                success: false,
+                message: 'General error',
+                err
+            }
+        )
     }
 }

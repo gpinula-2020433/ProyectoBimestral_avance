@@ -6,7 +6,9 @@ import {
     updateProduct,
     deleteProduct,
     outOfStockProducts,
-    bestSellingProducts
+    bestSellingProducts,
+    searchProductsByName,
+    getProductsByCategory
 } from './product.controller.js';
 import { validateJwt, isAdmin } from '../../middlewares/validate.jwt.js';
 
@@ -16,6 +18,8 @@ const api = Router();
 
 api.get('/fuerastock', outOfStockProducts)
 api.get('/productosmasvendidos', bestSellingProducts)
+api.get('/buscarproductbyname', searchProductsByName)
+api.get('/filterproductsbycategory/:categoryId', getProductsByCategory)
 
 api.get('/:id', [validateJwt, isAdmin], getProduct);
 api.get('/', getAllP);
